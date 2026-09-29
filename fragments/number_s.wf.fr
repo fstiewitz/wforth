@@ -1,0 +1,6 @@
+\ forth word #s
+: #s
+begin
+    #
+    2dup or 0=
+until ;

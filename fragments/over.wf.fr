@@ -1,0 +1,2 @@
+\ forth word over
+: over swap dup rot swap ;

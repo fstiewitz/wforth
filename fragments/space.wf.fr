@@ -1,0 +1,2 @@
+\ forth word space
+: space 32 emit ;

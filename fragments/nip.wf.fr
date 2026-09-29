@@ -1,0 +1,2 @@
+\ forth word nip
+: nip swap drop ;

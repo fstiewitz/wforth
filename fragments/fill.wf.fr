@@ -1,0 +1,9 @@
+\ forth word fill
+: fill
+>r
+begin
+    ?dup
+while
+    over r@ swap c!
+    1 /string
+repeat drop r> drop ;

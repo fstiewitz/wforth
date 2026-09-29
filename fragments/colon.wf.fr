@@ -1,0 +1,5 @@
+\ forth word :
+: :
+0 (create)
+['] create @ here 1 cells - !
+-1 state ! ;

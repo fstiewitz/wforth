@@ -1,0 +1,2 @@
+\ forth immediate word [
+: [ 0 state ! ; immediate

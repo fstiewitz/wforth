@@ -1,0 +1,9 @@
+\ forth word fm/mod
+: fm/mod
+    dup >r
+    sm/rem
+    over dup 0= invert swap 0< r@ 0< xor and if
+        1- swap r> + swap
+    else
+        r> drop
+    then ;

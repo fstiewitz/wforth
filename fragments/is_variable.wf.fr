@@ -1,0 +1,2 @@
+\ forth word ?variable
+: ?variable 1 cells - @ 2 and ;

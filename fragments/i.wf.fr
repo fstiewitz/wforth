@@ -1,0 +1,2 @@
+\ forth word i
+: i r> r> r> dup swap >r swap >r swap >r ;

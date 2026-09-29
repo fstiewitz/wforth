@@ -1,0 +1,7 @@
+\ forth word move
+: move
+>r 2dup < if
+    r> cmove>
+else
+    r> cmove
+then ;

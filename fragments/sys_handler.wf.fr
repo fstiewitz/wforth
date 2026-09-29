@@ -1,0 +1,2 @@
+\ forth word (handler)
+variable (handler)

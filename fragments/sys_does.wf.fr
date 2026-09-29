@@ -1,0 +1,7 @@
+\ forth word (does)
+: (does)
+current @ name>word
+dup 1 cells - 0 swap ! \ clear flags
+dup ['] (doing) @ swap ! \ set code
+2 cells + dup rot swap - swap ! \ set jmp addr
+;

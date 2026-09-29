@@ -1,0 +1,2 @@
+\ forth word hex
+: hex 16 base ! ;

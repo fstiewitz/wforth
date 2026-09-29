@@ -1,0 +1,12 @@
+\ forth word (leave)
+: (leave)
+1 >r
+begin
+    swap dup 2 =
+    over 3 = or 0=
+while
+    >r
+repeat swap
+begin
+    r> dup 1 =
+until drop ;

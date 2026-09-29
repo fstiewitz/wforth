@@ -1,0 +1,2 @@
+\ forth word count
+: count dup c@ swap 1+ swap ;

@@ -1,0 +1,2 @@
+\ forth immediate word do
+: do postpone >r postpone >r 2 postpone begin ; immediate

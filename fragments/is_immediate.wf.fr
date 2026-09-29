@@ -1,0 +1,2 @@
+\ forth word ?immediate
+: ?immediate 1 cells - @ 1 and ;

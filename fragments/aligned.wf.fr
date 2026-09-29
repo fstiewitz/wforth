@@ -1,0 +1,2 @@
+\ forth word aligned
+: aligned dup 8 mod ?dup if 8 swap - + then ;

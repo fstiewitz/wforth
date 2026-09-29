@@ -1,0 +1,8 @@
+\ forth word name>string
+: name>string
+1 cells + 0
+begin
+    2dup chars + c@
+while
+    1+
+repeat ;

@@ -1,0 +1,2 @@
+\ forth word d>s
+: d>s drop ;

@@ -1,0 +1,13 @@
+\ forth word #
+: #
+1 base @ um*/mod
+dup 10 < if
+    48 +
+else
+    dup 37 < if
+        10 - 65 +
+    else
+        drop 35
+    then
+then
+hold ;

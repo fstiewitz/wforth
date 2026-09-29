@@ -1,0 +1,2 @@
+\ forth word cr
+: cr 10 emit ;

@@ -1,0 +1,2 @@
+\ forth word c,
+: c, (here) @ c! 1 (here) +! ;

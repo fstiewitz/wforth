@@ -1,0 +1,6 @@
+\ forth word create
+: create
+2 (create)
+['] (doing0) @ here 1 cells - !
+['] (doing1) , 0 ,
+(finish) ;

@@ -1,0 +1,2 @@
+\ forth word (abort-msg)
+2variable (abort-msg)

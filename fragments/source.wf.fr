@@ -1,0 +1,3 @@
+\ forth word source
+: source
+(source-str) dup 2 cells + @ swap @ ;

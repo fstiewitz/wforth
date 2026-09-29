@@ -1,0 +1,2 @@
+\ forth word (word)
+256 chars buffer: (word)

@@ -1,0 +1,20 @@
+\ forth word compare
+: compare
+rot swap >r >r
+begin
+    r> r> 2dup >r >r
+    0= swap 0= or invert
+while
+    over c@ over c@ -
+    dup 0< if
+        r> r> 2drop >r 2drop r> (sign) exit
+    else
+        dup 0 > if
+            r> r> 2drop >r 2drop r> (sign) exit
+        then
+    then
+    drop
+    char+ swap char+ swap
+    r> r> 1- swap 1- swap >r >r
+repeat
+2drop r> r> - (sign) ;

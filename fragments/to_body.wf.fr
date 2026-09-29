@@ -1,0 +1,4 @@
+\ forth word >body
+: >body
+dup @
+dup ['] (doing) @ = swap ['] (doing0) @ = or if 3 cells + else 1 cells + then ;

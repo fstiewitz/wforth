@@ -1,0 +1,4 @@
+\ forth immediate word +loop
+: +loop
+postpone (+loop)
+(doloop) ; immediate

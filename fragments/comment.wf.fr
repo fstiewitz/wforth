@@ -1,0 +1,10 @@
+\ forth immediate word (
+: (
+source >in @ /string 0 >r
+begin
+    over c@ 41 = 0=
+while
+    1 /string
+    r> 1 + >r
+repeat 2drop
+r> 1 + >in +! ; immediate

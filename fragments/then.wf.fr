@@ -1,0 +1,2 @@
+\ forth immediate word then
+: then dup here swap - swap ! ; immediate

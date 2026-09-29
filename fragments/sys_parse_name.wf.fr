@@ -1,0 +1,38 @@
+\ forth word (parse-name)
+: (parse-name)
+dup 32 = if
+    source dup >in @ dup rot u< invert if 2drop nip 0 exit then
+    /string
+    begin
+        ?dup
+    while
+        over c@ 32 > if
+            drop 0
+        else
+            1 /string
+            1 >in +!
+        then
+    repeat drop
+then
+source dup >in @ dup rot u< invert if 2drop nip 0 exit then
+/string 0 >r
+begin
+    ?dup
+while \ del c-addr u
+    rot dup >r rot dup >r rot
+    r> r> swap c@ swap dup 32 = if
+        drop 33 <
+    else
+        =
+    then
+    if
+        drop nip r@ -
+        r@ 1+ >in +!
+        r> exit
+    else
+        r> 1+ >r
+        1 /string
+    then
+repeat nip r@ -
+r@ >in +!
+r> ;

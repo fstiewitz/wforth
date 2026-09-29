@@ -1,0 +1,12 @@
+\ forth word cmove>
+: cmove>
+>r
+r@ + 1- swap r@ + 1- swap r>
+begin
+    ?dup
+while
+    >r
+    2dup swap c@ swap c!
+    1- swap 1- swap
+    r> 1-
+repeat 2drop ;

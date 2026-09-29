@@ -1,0 +1,10 @@
+\ forth immediate word s"
+: s"
+postpone (str)
+34 (parse-name) dup ,
+begin
+    ?dup
+while
+    over c@ c,
+    1 /string
+repeat drop align ; immediate

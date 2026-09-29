@@ -1,0 +1,2 @@
+\ forth word cell+
+: cell+ 1 cells + ;

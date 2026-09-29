@@ -1,0 +1,374 @@
+(   TITLE:  IEEE F~ TESTS
+     FILE:  IEEE-FPROX-TEST.FS
+   AUTHOR:  DAVID N. WILLIAMS
+  VERSION:  0.5.1
+  LICENSE:  PUBLIC DOMAIN
+  REVISED:  JULY 1, 2009
+
+VERSION 0.5.1
+ 1JUL09 * INSERTED FABS IN DEFINITIONS OF +INF AND +0.
+
+VERSION 0.5.0
+29JUN09 * STARTED.
+30JUN09 * RELEASED.
+)
+
+CR .( RUNNING IEEE-FPROX-TEST.FS)
+CR .( --------------------------) CR
+
+\ CAUSES PFE TO LOAD FLOATING POINT:
+S" FLOATING-EXT" ENVIRONMENT? [IF] DROP [THEN]
+
+\ S" TTESTER.FS" INCLUDED
+DECIMAL
+TRUE VERBOSE !
+
+: ?.CR  ( -- )  VERBOSE @ IF CR THEN ;
+?.CR
+
+\ THE TTESTER DEFAULT FOR EXACT? IS TRUE.  UNCOMMENT THE
+\ FOLLOWING LINE IF YOUR SYSTEM NEEDS IT TO BE FALSE:
+\ SET-NEAR
+
+VARIABLE #ERRORS  0 #ERRORS !
+
+:NONAME  ( C-ADDR U -- )
+(
+DISPLAY AN ERROR MESSAGE FOLLOWED BY THE LINE THAT HAD THE
+ERROR.
+)
+  1 #ERRORS +! ERROR1 ; ERROR-XT !
+
+: ?.ERRORS  ( -- )  VERBOSE @ IF ." #ERRORS: " #ERRORS @ . THEN ;
+
+[UNDEFINED] \\ [IF]  \ FOR DEBUGGING
+: \\  ( -- )  -1 PARSE 2DROP BEGIN REFILL 0= UNTIL ; [THEN]
+
+\ FABS SHOULD BE SUPERFLUOUS IN THESE:
+
+0E FABS       FCONSTANT +0
++0 FNEGATE    FCONSTANT -0
+1E 0E F/ FABS FCONSTANT +INF
++INF FNEGATE  FCONSTANT -INF
+
+\ FABS IS NOT SUPERFLOUS HERE, BECAUSE THE SIGN OF 0/0 IS NOT
+\ SPECIFIED BY IEEE, AND IS ACTUALLY DIFFERENT IN MAC OS X
+\ PPC/INTEL (+/-), BOTH FOR GFORTH AND PFE:
+
+0E 0E F/ FABS FCONSTANT +NAN
++NAN FNEGATE  FCONSTANT -NAN
+
+TESTING EQUALITY OF FLOATING-POINT ENCODING
+
+T{ +0 +0  +0 F~ -> TRUE }T
+T{ +0 -0  +0 F~ -> FALSE }T
+T{ -0 +0  +0 F~ -> FALSE }T
+T{ -0 -0  +0 F~ -> TRUE }T
+
+T{  7E -2E  +0 F~ -> FALSE }T
+T{ -2E  7E  +0 F~ -> FALSE }T
+T{  7E  7E  +0 F~ -> TRUE }T
+   
+T{  7E +INF  +0 F~ -> FALSE }T
+T{ +INF 7E   +0 F~ -> FALSE }T
+T{  7E -INF  +0 F~ -> FALSE }T
+T{ -INF 7E   +0 F~ -> FALSE }T
+
+T{ +INF +INF  +0 F~ -> TRUE }T
+T{ +INF -INF  +0 F~ -> FALSE }T
+T{ -INF +INF  +0 F~ -> FALSE }T
+T{ -INF -INF  +0 F~ -> TRUE }T
+
+T{ +NAN 7E   +0 F~ -> FALSE }T
+T{ -NAN 7E   +0 F~ -> FALSE }T
+T{  7E +NAN  +0 F~ -> FALSE }T
+T{  7E -NAN  +0 F~ -> FALSE }T
+
+T{ +NAN +NAN  +0 F~ -> TRUE }T
+T{ -NAN +NAN  +0 F~ -> FALSE }T
+T{ +NAN -NAN  +0 F~ -> FALSE }T
+T{ -NAN -NAN  +0 F~ -> TRUE }T
+
+T{ +INF +NAN  +0 F~ -> FALSE }T
+T{ -INF +NAN  +0 F~ -> FALSE }T
+T{ +INF -NAN  +0 F~ -> FALSE }T
+T{ -INF -NAN  +0 F~ -> FALSE }T
+
+T{ +NAN +INF  +0 F~ -> FALSE }T
+T{ -NAN +INF  +0 F~ -> FALSE }T
+T{ +NAN -INF  +0 F~ -> FALSE }T
+T{ -NAN -INF  +0 F~ -> FALSE }T
+
+
+T{ +0 +0  -0 F~ -> TRUE }T
+T{ +0 -0  -0 F~ -> FALSE }T
+T{ -0 +0  -0 F~ -> FALSE }T
+T{ -0 -0  -0 F~ -> TRUE }T
+
+T{  7E -2E  -0 F~ -> FALSE }T
+T{ -2E  7E  -0 F~ -> FALSE }T
+T{  7E  7E  -0 F~ -> TRUE }T
+
+T{  7E +INF  -0 F~ -> FALSE }T
+T{ +INF 7E   -0 F~ -> FALSE }T
+T{  7E -INF  -0 F~ -> FALSE }T
+T{ -INF 7E   -0 F~ -> FALSE }T
+
+T{ +INF -INF  -0 F~ -> FALSE }T
+T{ -INF +INF  -0 F~ -> FALSE }T
+T{ -INF -INF  -0 F~ -> TRUE }T
+T{ +INF +INF  -0 F~ -> TRUE }T
+
+T{ +NAN 7E   -0 F~ -> FALSE }T
+T{ -NAN 7E   -0 F~ -> FALSE }T
+T{  7E +NAN  -0 F~ -> FALSE }T
+T{  7E -NAN  -0 F~ -> FALSE }T
+
+T{ +NAN +NAN  -0 F~ -> TRUE }T
+T{ -NAN +NAN  -0 F~ -> FALSE }T
+T{ +NAN -NAN  -0 F~ -> FALSE }T
+T{ -NAN -NAN  -0 F~ -> TRUE }T
+
+T{ +INF +NAN  -0 F~ -> FALSE }T
+T{ -INF +NAN  -0 F~ -> FALSE }T
+T{ +INF -NAN  -0 F~ -> FALSE }T
+T{ -INF -NAN  -0 F~ -> FALSE }T
+
+T{ +NAN +INF  -0 F~ -> FALSE }T
+T{ -NAN +INF  -0 F~ -> FALSE }T
+T{ +NAN -INF  -0 F~ -> FALSE }T
+T{ -NAN -INF  -0 F~ -> FALSE }T
+
+TESTING ABSOLUTE TOLERANCE
+
+T{ +0 +0  7E F~ -> TRUE }T
+T{ +0 -0  7E F~ -> TRUE }T
+T{ -0 +0  7E F~ -> TRUE }T
+T{ -0 -0  7E F~ -> TRUE }T
+
+T{  7E +INF  7E F~ -> FALSE }T
+T{ +INF 7E   7E F~ -> FALSE }T
+T{  7E -INF  7E F~ -> FALSE }T
+T{ -INF 7E   7E F~ -> FALSE }T
+
+T{ +INF +INF  7E F~ -> FALSE }T
+T{ +INF -INF  7E F~ -> FALSE }T
+T{ -INF +INF  7E F~ -> FALSE }T
+T{ -INF -INF  7E F~ -> FALSE }T
+
+T{ +NAN 7E   7E F~ -> FALSE }T
+T{ -NAN 7E   7E F~ -> FALSE }T
+T{  7E +NAN  7E F~ -> FALSE }T
+T{  7E -NAN  7E F~ -> FALSE }T
+
+T{ +NAN +NAN  7E F~ -> FALSE }T
+T{ -NAN +NAN  7E F~ -> FALSE }T
+T{ +NAN -NAN  7E F~ -> FALSE }T
+T{ -NAN -NAN  7E F~ -> FALSE }T
+
+T{ +INF +NAN  7E F~ -> FALSE }T
+T{ -INF +NAN  7E F~ -> FALSE }T
+T{ +INF -NAN  7E F~ -> FALSE }T
+T{ -INF -NAN  7E F~ -> FALSE }T
+
+T{ +NAN +INF  7E F~ -> FALSE }T
+T{ -NAN +INF  7E F~ -> FALSE }T
+T{ +NAN -INF  7E F~ -> FALSE }T
+T{ -NAN -INF  7E F~ -> FALSE }T
+
+T{ +0 +0  +INF F~ -> TRUE }T
+T{ +0 -0  +INF F~ -> TRUE }T
+T{ -0 +0  +INF F~ -> TRUE }T
+T{ -0 -0  +INF F~ -> TRUE }T
+
+T{  7E -2E  +INF F~ -> TRUE }T
+T{ -2E  7E  +INF F~ -> TRUE }T
+T{  7E  7E  +INF F~ -> TRUE }T
+
+T{  7E +INF  +INF F~ -> FALSE }T
+T{ +INF 7E   +INF F~ -> FALSE }T
+T{  7E -INF  +INF F~ -> FALSE }T
+T{ -INF 7E   +INF F~ -> FALSE }T
+
+T{ +INF +INF  +INF F~ -> FALSE }T
+T{ +INF -INF  +INF F~ -> FALSE }T
+T{ -INF +INF  +INF F~ -> FALSE }T
+T{ -INF -INF  +INF F~ -> FALSE }T
+
+T{ +NAN 7E   +INF F~ -> FALSE }T
+T{ -NAN 7E   +INF F~ -> FALSE }T
+T{  7E +NAN  +INF F~ -> FALSE }T
+T{  7E -NAN  +INF F~ -> FALSE }T
+
+T{ +NAN +NAN  +INF F~ -> FALSE }T
+T{ -NAN +NAN  +INF F~ -> FALSE }T
+T{ +NAN -NAN  +INF F~ -> FALSE }T
+T{ -NAN -NAN  +INF F~ -> FALSE }T
+
+T{ +INF +NAN  +INF F~ -> FALSE }T
+T{ -INF +NAN  +INF F~ -> FALSE }T
+T{ +INF -NAN  +INF F~ -> FALSE }T
+T{ -INF -NAN  +INF F~ -> FALSE }T
+
+T{ +NAN +INF  +INF F~ -> FALSE }T
+T{ -NAN +INF  +INF F~ -> FALSE }T
+T{ +NAN -INF  +INF F~ -> FALSE }T
+T{ -NAN -INF  +INF F~ -> FALSE }T
+
+T{ +0 +0  +NAN F~ -> FALSE }T
+T{ +0 -0  +NAN F~ -> FALSE }T
+T{ -0 +0  +NAN F~ -> FALSE }T
+T{ -0 -0  +NAN F~ -> FALSE }T
+
+T{  7E -2E  +NAN F~ -> FALSE }T
+T{ -2E  7E  +NAN F~ -> FALSE }T
+T{  7E  7E  +NAN F~ -> FALSE }T
+
+T{  7E +INF  +NAN F~ -> FALSE }T
+T{ +INF 7E   +NAN F~ -> FALSE }T
+T{  7E -INF  +NAN F~ -> FALSE }T
+T{ -INF 7E   +NAN F~ -> FALSE }T
+
+T{ +INF +INF  +NAN F~ -> FALSE }T
+T{ +INF -INF  +NAN F~ -> FALSE }T
+T{ -INF +INF  +NAN F~ -> FALSE }T
+T{ -INF -INF  +NAN F~ -> FALSE }T
+
+T{ +NAN 7E   +NAN F~ -> FALSE }T
+T{ -NAN 7E   +NAN F~ -> FALSE }T
+T{  7E +NAN  +NAN F~ -> FALSE }T
+T{  7E -NAN  +NAN F~ -> FALSE }T
+
+T{ +NAN +NAN  +NAN F~ -> FALSE }T
+T{ -NAN +NAN  +NAN F~ -> FALSE }T
+T{ +NAN -NAN  +NAN F~ -> FALSE }T
+T{ -NAN -NAN  +NAN F~ -> FALSE }T
+
+T{ +INF +NAN  +NAN F~ -> FALSE }T
+T{ -INF +NAN  +NAN F~ -> FALSE }T
+T{ +INF -NAN  +NAN F~ -> FALSE }T
+T{ -INF -NAN  +NAN F~ -> FALSE }T
+
+T{ +NAN +INF  +NAN F~ -> FALSE }T
+T{ -NAN +INF  +NAN F~ -> FALSE }T
+T{ +NAN -INF  +NAN F~ -> FALSE }T
+T{ -NAN -INF  +NAN F~ -> FALSE }T
+
+TESTING RELATIVE TOLERANCE
+
+T{ +0 +0  -7E F~ -> FALSE }T
+T{ +0 -0  -7E F~ -> FALSE }T
+T{ -0 +0  -7E F~ -> FALSE }T
+T{ -0 -0  -7E F~ -> FALSE }T
+
+T{  7E +INF  -7E F~ -> FALSE }T
+T{ +INF 7E   -7E F~ -> FALSE }T
+T{  7E -INF  -7E F~ -> FALSE }T
+T{ -INF 7E   -7E F~ -> FALSE }T
+
+T{ +INF +INF  -7E F~ -> FALSE }T
+T{ +INF -INF  -7E F~ -> FALSE }T
+T{ -INF +INF  -7E F~ -> FALSE }T
+T{ -INF -INF  -7E F~ -> FALSE }T
+
+T{ +NAN 7E   -7E F~ -> FALSE }T
+T{ -NAN 7E   -7E F~ -> FALSE }T
+T{  7E +NAN  -7E F~ -> FALSE }T
+T{  7E -NAN  -7E F~ -> FALSE }T
+
+T{ +NAN +NAN  -7E F~ -> FALSE }T
+T{ -NAN +NAN  -7E F~ -> FALSE }T
+T{ +NAN -NAN  -7E F~ -> FALSE }T
+T{ -NAN -NAN  -7E F~ -> FALSE }T
+
+T{ +INF +NAN  -7E F~ -> FALSE }T
+T{ -INF +NAN  -7E F~ -> FALSE }T
+T{ +INF -NAN  -7E F~ -> FALSE }T
+T{ -INF -NAN  -7E F~ -> FALSE }T
+
+T{ +NAN +INF  -7E F~ -> FALSE }T
+T{ -NAN +INF  -7E F~ -> FALSE }T
+T{ +NAN -INF  -7E F~ -> FALSE }T
+T{ -NAN -INF  -7E F~ -> FALSE }T
+
+T{ +0 +0  -INF F~ -> FALSE }T
+T{ +0 -0  -INF F~ -> FALSE }T
+T{ -0 +0  -INF F~ -> FALSE }T
+T{ -0 -0  -INF F~ -> FALSE }T
+
+T{  7E -2E  -INF F~ -> TRUE }T
+T{ -2E  7E  -INF F~ -> TRUE }T
+T{  7E  7E  -INF F~ -> TRUE }T
+
+T{  7E +INF  -INF F~ -> FALSE }T
+T{ +INF 7E   -INF F~ -> FALSE }T
+T{  7E -INF  -INF F~ -> FALSE }T
+T{ -INF 7E   -INF F~ -> FALSE }T
+
+T{ +INF +INF  -INF F~ -> FALSE }T
+T{ +INF -INF  -INF F~ -> FALSE }T
+T{ -INF +INF  -INF F~ -> FALSE }T
+T{ -INF -INF  -INF F~ -> FALSE }T
+
+T{ +NAN 7E   -INF F~ -> FALSE }T
+T{ -NAN 7E   -INF F~ -> FALSE }T
+T{  7E +NAN  -INF F~ -> FALSE }T
+T{  7E -NAN  -INF F~ -> FALSE }T
+
+T{ +NAN +NAN  -INF F~ -> FALSE }T
+T{ -NAN +NAN  -INF F~ -> FALSE }T
+T{ +NAN -NAN  -INF F~ -> FALSE }T
+T{ -NAN -NAN  -INF F~ -> FALSE }T
+
+T{ +INF +NAN  -INF F~ -> FALSE }T
+T{ -INF +NAN  -INF F~ -> FALSE }T
+T{ +INF -NAN  -INF F~ -> FALSE }T
+T{ -INF -NAN  -INF F~ -> FALSE }T
+
+T{ +NAN +INF  -INF F~ -> FALSE }T
+T{ -NAN +INF  -INF F~ -> FALSE }T
+T{ +NAN -INF  -INF F~ -> FALSE }T
+T{ -NAN -INF  -INF F~ -> FALSE }T
+
+T{ +0 +0  +NAN F~ -> FALSE }T
+T{ +0 -0  +NAN F~ -> FALSE }T
+T{ -0 +0  +NAN F~ -> FALSE }T
+T{ -0 -0  +NAN F~ -> FALSE }T
+
+T{  7E -2E  -NAN F~ -> FALSE }T
+T{ -2E  7E  -NAN F~ -> FALSE }T
+T{  7E  7E  -NAN F~ -> FALSE }T
+
+T{  7E +INF  -NAN F~ -> FALSE }T
+T{ +INF 7E   -NAN F~ -> FALSE }T
+T{  7E -INF  -NAN F~ -> FALSE }T
+T{ -INF 7E   -NAN F~ -> FALSE }T
+
+T{ +INF +INF  -NAN F~ -> FALSE }T
+T{ +INF -INF  -NAN F~ -> FALSE }T
+T{ -INF +INF  -NAN F~ -> FALSE }T
+T{ -INF -INF  -NAN F~ -> FALSE }T
+
+T{ +NAN 7E   -NAN F~ -> FALSE }T
+T{ -NAN 7E   -NAN F~ -> FALSE }T
+T{  7E +NAN  -NAN F~ -> FALSE }T
+T{  7E -NAN  -NAN F~ -> FALSE }T
+
+T{ +NAN +NAN  -NAN F~ -> FALSE }T
+T{ -NAN +NAN  -NAN F~ -> FALSE }T
+T{ +NAN -NAN  -NAN F~ -> FALSE }T
+T{ -NAN -NAN  -NAN F~ -> FALSE }T
+
+T{ +INF +NAN  -NAN F~ -> FALSE }T
+T{ -INF +NAN  -NAN F~ -> FALSE }T
+T{ +INF -NAN  -NAN F~ -> FALSE }T
+T{ -INF -NAN  -NAN F~ -> FALSE }T
+
+T{ +NAN +INF  -NAN F~ -> FALSE }T
+T{ -NAN +INF  -NAN F~ -> FALSE }T
+T{ +NAN -INF  -NAN F~ -> FALSE }T
+T{ -NAN -INF  -NAN F~ -> FALSE }T
+
+?.ERRORS ?.CR
+
+CR .( END OF IEEE-FPROX-TEST.FS) CR

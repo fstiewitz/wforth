@@ -1,0 +1,2 @@
+\ forth word ,
+: , (here) @ ! 1 cells (here) +! ;

@@ -1,0 +1,2 @@
+\ forth immediate word repeat
+: repeat postpone again postpone then ; immediate

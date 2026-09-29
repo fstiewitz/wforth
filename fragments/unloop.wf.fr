@@ -1,0 +1,2 @@
+\ forth word unloop
+: unloop r> r> r> 2drop >r ;

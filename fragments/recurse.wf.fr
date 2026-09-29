@@ -1,0 +1,2 @@
+\ forth immediate word recurse
+: recurse (current) @ name>word compile, ; immediate

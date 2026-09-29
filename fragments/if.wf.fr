@@ -1,0 +1,2 @@
+\ forth immediate word if
+: if ['] (br) , here 0 , ; immediate

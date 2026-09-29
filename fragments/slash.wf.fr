@@ -1,0 +1,2 @@
+\ forth word /
+: / 1 swap */mod nip ;

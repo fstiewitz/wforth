@@ -1,0 +1,8 @@
+*.swp
+*.out
+wforth
+wforth-*
+*.o
+*_m.S
+./wforth.S
+wforth-*.S

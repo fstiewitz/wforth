@@ -1,0 +1,31 @@
+\ forth word parse-name
+: parse-name
+source dup >in @ dup rot u< invert if 2drop 0 exit then
+/string 0 >r
+begin
+    ?dup
+while
+    over c@ 32 > if
+        drop 0
+    else
+        r> 1+ >r
+        1 /string
+    then
+repeat drop
+r> >in +!
+
+source >in @ /string 0 >r
+begin
+    ?dup
+while
+    over c@ 32 > 0= if
+        drop r@ -
+        r@ 1+ >in +!
+        r> exit
+    else
+        r> 1+ >r
+        1 /string
+    then
+repeat r@ -
+r@ >in +!
+r> ;

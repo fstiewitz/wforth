@@ -1,0 +1,128 @@
+# wforth
+
+a Forth that passes core tests
+- uses indirect threaded code (ITC)
+- easy to port
+
+## usage
+
+to build, use 'make' with a profile of your choice:
+
+    make wforth             # x86_64
+    make wforth-maxtext     # x86_64
+    make wforth-rv64        # RISC-V 64
+    make wforth-aarch64     # AArch64
+
+the 'maxtext' profile implements most of its words as native words in assembly. other profiles instead only natively assemble a minimal number of words.
+
+building some profiles might require a cross-compiler (the Makefile assumes x86_64 as host). testing some profiles might require 'qemu-user' to be available for the target architecture.
+
+to use:
+
+    ./wforth
+    ./wforth-maxtext
+    ./wforth-rv64
+    ./wforth-aarch64
+
+to test:
+
+    make test-wforth
+    make test-wforth-maxtext
+    make test-wforth-rv64
+    make test-wforth-aarch64
+
+## porting
+
+a wforth system consists of the following words:
+
+    ! # #> ' ( * */ + +! +loop , - . ." .( / : ; < <# = > @ [
+    ['] \ ] 0< 0= 1+ 1- 2! 2* 2/ 2@ 2drop 2dup 2over 2swap abs
+    accept again ahead align aligned allot and base begin bl
+    >body bye c! c, c@ catch cell+ cells [char] char+ char
+    chars cmove cmove> compare compile, constant count cr
+    create decimal depth do does> drop d>s ?dup dup else emit
+    evaluate execute exit false fill find fm/mod here hex hold
+    i if immediate >in invert j leave literal loop lshift m* m+
+    max min */mod /mod mod move name>string name>word negate
+    nip >number or over parse-name postpone quit >r r> r@
+    recurse refill repeat rot rp! rp@ rshift #s s" s>d
+    search-wordlist sign sm/rem source sp! sp@ space spaces
+    state /string swap then throw true type u. u< um*
+    um/mod unloop until variable while within word words xor 
+
+    compare-nocase ?immediate interpret interpret-step ?upper
+    ?variable WFORTH um*/mod
+
+    (abort-msg) (br) (create) (current) (does) (doing) (doing0)
+    (doing1) (doloop) (finish) (handler) (here) (jmp) (leave)
+    (+loop) (loop) (parse-name) (po) (push) (quit) (refs)
+    (sign) (str) (word)
+
+the following minimal set must be implemented natively:
+
+    and bye cells c@ c! depth drop dup emit = exit false @ > <
+    lshift max - min m+ m* or + refill r@ r> rot rp@ rp! rshift
+    sm/rem sp@ sp! */mod * ! swap >r true 2/ 2swap u< um/mod
+    um* xor
+
+    : (here) ( -- a-addr ) push address of '.hereptr'
+    : (quit) ( -- ) see fragments/unimplemented/sys_quit.wf.S
+    : (refs) ( -- ) push address of '.refdata'
+    : um*/mod ( ud u u -- ud u ) m*/, unsigned, with remainder
+
+    um*/mod is used by the interpreter, >NUMBER and '#', but
+    only in two cases:
+
+    ud 1 u um*/mod
+    ud u 1 um*/mod
+
+- all words are listed in 'lists/core.txt', mapped to a file name.
+- all words are defined somewhere in 'fragments/', one per file, with a header line specifying name and immediate status.
+- a "profile" is a folder path in 'fragments/'.
+- the bootstrap compiler "build.sh" finds one '.wf.fr', '.wf.S' or '.wf.c' for each word, starting from the profile folder and moving up to 'fragments/'.
+- all '.wf.fr' and '.wf.S' are copied into a '.waf.S' assembly file alongside generated word definitions and directives.
+- the bootstrap assembler 'wforth.awk' produces the final assembly file from '.waf.S'
+- the assembly file is compiled together with needed '.wf.c' files.
+
+to port wforth to a new platform:
+
+1. create a profile folder, like 'fragments/myarch16'.
+2. copy 'fragments/unimplemented/*' to your profile.
+3. check out one of the unimplemented definitions, like 'xor.wf.S':
+
+    // native word .cxor xor
+    .cxor:
+    mv a0, fp // a0: first argument, fp: ITC instruction pointer
+    call unimplemented
+
+4. use text processing tools like 'sed' to convert these calls to the call signature and assembly dialect of your target architecture.
+5. edit the following files (in 'unimplemented/', these are based on RV64 and annotated):
+
+    wforth.S
+    sys_br.wf.S
+    sys_jmp.wf.S
+    sys_push.wf.S
+    sys_doing.wf.S
+    sys_doing0.wf.S
+    sys_doing1.wf.S
+    sys_variable.wf.S
+    sys_docol.wf.S
+    codegen-c.sh
+
+6. build your profile
+
+    CC=myarch16-linux-gnu-gcc ./build.sh wforth-myarch16 myarch16 core dbg
+
+7. if compiled successfully, run the test suite:
+
+    cat test/src/all.fr | qemu-myarch16 -L /usr/myarch16-linux-gnu ./wforth-myarch16
+
+8. if wforth terminates with 'UNIMPLEMENTED !' you're on the right track.
+9. write a proper implementation in 'store.wf.S'.
+10. compile again.
+11. test again.
+12. go back to step 8 until all words are implemented and the tests all pass.
+
+## license
+
+0BSD

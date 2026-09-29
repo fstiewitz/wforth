@@ -1,0 +1,3 @@
+\ forth word char
+: char
+parse-name if c@ else -16 throw then ;

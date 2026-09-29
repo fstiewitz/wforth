@@ -1,0 +1,5 @@
+\ forth immediate word does>
+: does>
+here 4 cells + postpone literal
+postpone (does)
+postpone exit ; immediate

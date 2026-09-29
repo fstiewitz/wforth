@@ -1,0 +1,2 @@
+\ forth immediate word leave
+: leave postpone unloop postpone ahead (leave) ; immediate

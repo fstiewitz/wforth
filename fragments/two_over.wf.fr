@@ -1,0 +1,2 @@
+\ forth word 2over
+: 2over >r >r 2dup r> r> 2swap ;

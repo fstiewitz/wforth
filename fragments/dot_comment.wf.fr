@@ -1,0 +1,11 @@
+\ forth word .(
+: .(
+source >in @ /string 0 >r
+begin
+    ?dup
+while
+    over c@ dup 41 = if drop 2drop r> 1 + >in +! exit then
+    emit
+    1 /string
+    r> 1 + >r
+repeat drop r> 1 + >in +! ;

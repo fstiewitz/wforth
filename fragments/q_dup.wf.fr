@@ -1,0 +1,2 @@
+\ forth word ?dup
+: ?dup dup if dup then ;

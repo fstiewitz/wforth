@@ -1,0 +1,7 @@
+\ forth word word
+: word
+(parse-name) dup 256 u< if
+    (word) char+ swap dup >r cmove
+    r> (word) c!
+    (word)
+else -18 throw then ;

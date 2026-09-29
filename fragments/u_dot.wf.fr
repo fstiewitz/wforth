@@ -1,0 +1,2 @@
+\ forth word u.
+: u. 0 <# #s #> type space ;

@@ -1,0 +1,2 @@
+\ forth word sign
+: sign 0< if 45 hold then ;

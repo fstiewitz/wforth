@@ -1,0 +1,2 @@
+\ forth word (po)
+256 chars buffer: (po)

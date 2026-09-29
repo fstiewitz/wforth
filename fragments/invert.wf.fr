@@ -1,0 +1,2 @@
+\ forth word invert
+: invert -1 xor ;

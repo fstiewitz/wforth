@@ -1,0 +1,5 @@
+\ forth word hold
+: hold
+(po) dup c@ 0< if -17 throw then
+dup dup c@ dup rot swap 1 - swap c!
++ c! ;

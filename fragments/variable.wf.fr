@@ -1,0 +1,2 @@
+\ forth word variable
+: variable 2 (create) (finish) 0 , ;

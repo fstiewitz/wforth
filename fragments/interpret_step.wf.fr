@@ -1,0 +1,23 @@
+\ forth word interpret-step
+: interpret-step
+parse-name
+\    2dup type cr
+2dup (abort-msg) 2!
+?dup if
+    2dup current search-wordlist ?dup if
+        2swap 2drop
+        1+ state @ if
+            if execute else compile, then
+        else drop execute then
+    else
+        over c@ 45 = if -1 >r 1 /string else 1 >r then
+        0 0 2swap >number nip if
+            -13 throw
+        else
+            d>s r> * state @ if postpone literal then
+        then
+    then
+    0
+else
+    drop 1
+then ;

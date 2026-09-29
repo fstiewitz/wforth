@@ -1,0 +1,3 @@
+\ forth immediate word [char]
+: [char]
+parse-name if c@ postpone literal else -16 throw then ; immediate

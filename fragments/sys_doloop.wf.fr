@@ -1,0 +1,15 @@
+\ forth word (doloop)
+: (doloop)
+postpone until
+begin
+    dup 2 =
+    over 3 = or 0=
+while
+    postpone then
+repeat
+3 = if
+    drop
+    postpone else
+    postpone 2drop
+    postpone then
+then ;

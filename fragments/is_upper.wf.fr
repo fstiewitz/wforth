@@ -1,0 +1,2 @@
+\ forth word ?upper
+: ?upper dup 97 123 within if 32 - then ;

@@ -1,0 +1,2 @@
+\ forth word (current)
+variable (current)

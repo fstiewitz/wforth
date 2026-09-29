@@ -1,0 +1,13 @@
+\ forth word words
+: words
+current @
+begin
+    ?dup
+while
+    dup name>word
+    dup ?immediate if (string-word) I type else space then
+    ?variable if (string-word) V type else space then
+    space
+    dup name>string type cr
+    @
+repeat ;

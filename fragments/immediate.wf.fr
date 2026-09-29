@@ -1,0 +1,2 @@
+\ forth word immediate
+: immediate current @ name>word 1 cells - dup @ 1 or swap ! ;

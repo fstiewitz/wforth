@@ -1,0 +1,2 @@
+\ forth word char+
+: char+ 1+ ;

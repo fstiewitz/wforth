@@ -1,0 +1,2 @@
+\ forth immediate word else
+: else postpone ahead swap postpone then ; immediate

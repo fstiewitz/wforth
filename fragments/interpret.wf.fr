@@ -1,0 +1,2 @@
+\ forth word interpret
+: interpret begin interpret-step until ;

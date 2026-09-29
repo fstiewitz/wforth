@@ -1,0 +1,2 @@
+\ forth immediate word \
+: \ (source-str) dup @ swap 1 cells + ! ; immediate

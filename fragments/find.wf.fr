@@ -1,0 +1,3 @@
+\ forth word find
+: find
+count ?dup if current search-wordlist else drop 0 then ;

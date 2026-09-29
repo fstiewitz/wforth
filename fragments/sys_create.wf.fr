@@ -1,0 +1,18 @@
+\ forth word (create)
+: (create)
+align
+parse-name ?dup if
+    here (current) !
+    current @ ,
+    begin
+        ?dup
+    while
+        over c@ c,
+        1 /string
+    repeat drop 0 c,
+    align
+    ,
+    state 1 cells - @ ,
+else
+    -16 throw
+then ;

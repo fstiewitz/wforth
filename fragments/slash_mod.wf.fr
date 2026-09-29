@@ -1,0 +1,2 @@
+\ forth word /mod
+: /mod 1 swap */mod ;

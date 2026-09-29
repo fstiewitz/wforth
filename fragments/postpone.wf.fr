@@ -1,0 +1,11 @@
+\ forth immediate word postpone
+: postpone
+parse-name ?dup if
+    2dup (abort-msg) 2!
+    current search-wordlist ?dup if
+        -1 = if
+            postpone literal
+            postpone compile,
+        else compile, then
+    else -13 throw then
+else -48 throw then ; immediate

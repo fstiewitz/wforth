@@ -1,0 +1,5 @@
+\ forth word #>
+: #>
+2drop
+(po) dup c@ dup rot + 1+
+swap 255 swap - ;

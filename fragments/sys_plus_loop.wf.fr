@@ -1,0 +1,11 @@
+\ forth word (+loop)
+: (+loop)
+r> swap r> r> \ rt off final initial
+rot 2dup + >r \ rt final initial off R: new
+>r over - r> \ rt final diff off
+rot >r \ rt diff off R: new final
+2dup xor \ rt diff off diff^off
+rot rot \ rt diff^off diff off
+over + \ rt diff^off diff off+diff
+xor and \ rt diff^off&(diff^(off+diff))
+0< invert if 0 else r> r> 2drop -1 then swap >r ;

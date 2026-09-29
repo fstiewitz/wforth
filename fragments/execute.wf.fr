@@ -1,0 +1,7 @@
+\ forth word execute
+: execute
+dup ?variable if
+    >body
+else
+    >r
+then ;

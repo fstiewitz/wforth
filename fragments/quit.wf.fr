@@ -1,0 +1,29 @@
+\ forth word quit
+: quit
+(quit)
+decimal
+postpone [
+begin
+    refill
+while
+    ['] interpret catch
+        dup 0= if
+            drop state @ 0= if (string-word) ok type then cr
+        else
+            dup -1 = if
+                drop (string-word) abort type
+            else
+                dup -2 = if
+                    drop (abort-msg) 2@ type cr
+                else
+                    dup -13 = if
+                        drop (string-word) unknown type space
+                        (abort-msg) 2@ type cr
+                    else
+                        (string-word) exception type space . cr
+                    then
+                then
+            then
+            bye
+        then
+repeat bye ;

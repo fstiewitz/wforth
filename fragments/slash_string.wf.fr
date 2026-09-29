@@ -1,0 +1,2 @@
+\ forth word /string
+: /string dup >r - swap r> chars + swap ;

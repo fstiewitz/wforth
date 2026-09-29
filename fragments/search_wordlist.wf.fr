@@ -1,0 +1,11 @@
+\ forth word search-wordlist
+: search-wordlist
+@
+begin
+    ?dup
+while
+    >r 2dup r@ name>string compare-nocase 0= if
+        2drop r> name>word dup ?immediate if 1 else -1 then exit
+    then
+    r> @
+repeat 2drop 0 ;

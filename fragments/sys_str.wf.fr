@@ -1,0 +1,5 @@
+\ forth word (str)
+: (str)
+r> cell+
+dup dup cell+ swap @ rot
+over + aligned >r ;

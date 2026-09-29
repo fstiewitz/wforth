@@ -1,0 +1,10 @@
+\ forth word WFORTH
+: WFORTH
+(refs) 2 cells + @
+(refs) @
+begin
+    2dup = invert
+while
+    dup 45 type cr
+    45 +
+repeat 2drop ;

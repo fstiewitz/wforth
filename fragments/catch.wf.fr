@@ -1,0 +1,9 @@
+\ forth word catch
+: catch
+sp@ >r
+(handler) @ >r
+rp@ (handler) !
+execute
+r> (handler) !
+r> drop
+0 ;

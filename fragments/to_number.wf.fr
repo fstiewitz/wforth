@@ -1,0 +1,23 @@
+\ forth word >number
+: >number
+begin
+    dup
+while
+    over c@ swap >r swap >r
+    dup 48 58 within if
+        48 -
+    else
+        dup 65 91 within if
+            65 -
+        else
+            dup 97 123 within if
+                97 -
+            else drop r> r> exit then
+        then
+        10 +
+    then
+    dup base @ u< 0= if drop r> r> exit then
+    >r base @ 1 um*/mod drop r> m+
+    r> r>
+    1 /string
+repeat ;

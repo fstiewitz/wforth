@@ -1,0 +1,7 @@
+\ forth word align
+: align
+begin
+    here 8 mod
+while
+    0 c,
+repeat ;

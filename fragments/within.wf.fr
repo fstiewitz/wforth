@@ -1,0 +1,2 @@
+\ forth word within
+: within rot dup rot < >r swap < invert r> and ;

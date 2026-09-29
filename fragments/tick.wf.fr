@@ -1,0 +1,6 @@
+\ forth word '
+: '
+parse-name ?dup if
+    2dup (abort-msg) 2!
+    current search-wordlist 0= if -13 throw then
+else -16 throw then ;

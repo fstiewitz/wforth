@@ -1,0 +1,8 @@
+\ forth word (loop)
+: (loop)
+r> r> r> 1+
+2dup = if
+    2drop >r -1
+else
+    >r >r >r 0
+then ;

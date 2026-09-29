@@ -1,0 +1,2 @@
+\ forth word constant
+: constant : postpone literal postpone ; ;

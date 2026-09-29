@@ -1,0 +1,2 @@
+\ forth word spaces
+: spaces begin ?dup while space 1- repeat ;

@@ -1,0 +1,2 @@
+\ forth word .
+: . dup abs 0 <# #s rot sign #> type space ;

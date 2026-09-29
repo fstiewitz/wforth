@@ -1,0 +1,11 @@
+\ forth word throw
+: throw
+?dup if
+    (errno) !
+    (handler) @ rp!
+    r> (handler) !
+    r> sp!
+    drop
+    (errno) @
+then ;
+variable (errno)

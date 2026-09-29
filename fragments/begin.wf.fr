@@ -1,0 +1,2 @@
+\ forth immediate word begin
+: begin here ; immediate

@@ -1,0 +1,14 @@
+\ forth word evaluate
+: evaluate
+(source-str) dup 2@ >r >r 2 cells + @ >r
+(source-str)
+dup rot swap !
+dup rot swap 2 cells + !
+1 cells + 0 swap !
+['] interpret catch ?dup if
+    r> (source-str) dup rot swap 2 cells + !
+    r> r> rot 2!
+    throw
+then
+r> (source-str) dup rot swap 2 cells + !
+r> r> rot 2! ;

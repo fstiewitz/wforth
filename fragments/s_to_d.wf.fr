@@ -1,0 +1,2 @@
+\ forth word s>d
+: s>d dup 0< if -1 else 0 then ;

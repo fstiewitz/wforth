@@ -1,0 +1,5 @@
+\ forth word name>word
+: name>word
+1 cells +
+begin dup c@ while 1+ repeat
+1+ aligned 1 cells + ;

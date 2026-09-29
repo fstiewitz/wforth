@@ -1,0 +1,8 @@
+\ forth word type
+: type
+begin
+    ?dup
+while
+    over c@ emit
+    1 /string
+repeat drop ;

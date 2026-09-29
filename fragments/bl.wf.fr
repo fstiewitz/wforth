@@ -1,0 +1,2 @@
+\ forth word bl
+: bl 32 ;
